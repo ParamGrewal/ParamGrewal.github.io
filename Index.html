@@ -1,0 +1,236 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.11.0/sweetalert2.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.11.0/sweetalert2.all.min.js"></script>
+
+<head>
+<style>
+h1 {
+  font-size: 1.5em;
+  margin-left: 44px;
+}
+#container { width: 800px; margin-left: auto;
+  margin-right: auto;}
+ul { padding: 0;  margin: 0;}
+li {
+  padding: 0;
+  float: left;
+  margin: 10px;
+  list-style: none;
+  outline: solid;
+  width: 100px;
+  height: 100px;
+}
+
+img { 
+  width: 100%;
+  height: 100%;
+}
+div { 
+  width: 100%;
+  height: 100%;
+}
+
+
+
+#box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto
+  width: 100px;
+  height: 75px;
+  color: white;
+  font-family: 'Comic Sans MS';
+  font-size: 30px;
+  
+}
+
+
+.gradient-border {
+  --borderWidth: 3px;
+  background: #1D1F20;
+  
+  position: relative;
+  border-radius: var(--borderWidth);
+}
+.gradient-border:after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  border-radius: calc(2 * var(--borderWidth));
+  z-index: -1;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+  
+}
+
+
+@keyframes animatedgradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+a:visited {
+  color: green;
+}
+
+</style>
+</head>
+<div class="gradient-border"  id="box">
+<a style="text-align: justify"; href="page2.html"> <----- </a> 
+<pre>              The Memory Game             </pre><a style="text-align: justify"; href="page2.html">------></a> </div>
+
+
+
+<div id = "container" ></div>
+
+<button id="godMode" style= "float: right; color: white;" class="gradient-border">Developed By PSG</button>
+<p id="stepCounter" style= "float: left; color: white; margin-top: 0" class="gradient-border" />
+
+
+
+<script>
+var gm = 0;
+$("button.gradient-border").click(
+	function(){
+	gm++;
+	
+	if (gm==6)
+		$("#godMode").html('Enable God Mode');
+	if (gm >= 7){
+		$("img#fail").hide("slow");
+		$("img#pas").show("slow");
+		$("#godMode").html('You Won! But You lost... Technically :P');
+		}
+		
+	}
+)
+
+
+var images = [];
+ console.log(images);
+document.body.style.backgroundImage = "url('Images/backi.jpg')";
+document.body.style.backgroundRepeat="no-repeat";
+document.body.style.backgroundSize="1700px 900px";
+
+var win=0;
+var tries=0;
+
+
+// get images, place them in an array & randomize the order
+var myArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
+for (var i = 0; i < 18; i++) { 
+var rand = myArray[Math.floor(Math.random()*myArray.length)];
+console.log(rand);
+myArray.splice( myArray.indexOf(rand), 1 );
+  var img = 'Images/'+ rand + '.jpg';
+  images.push(img);
+  images.push(img);
+  
+  
+}
+randomizeImages();
+
+// output images then hide them
+var output = "<ol>"; 
+for (var i = 0; i < 36; i++) { 
+  output += "<li>";
+  output += "<img  id='fail' src = 'Images/100.jpg'/>";
+  output += "<img id = 'pas'  src = '" + images[i] + "'/>";
+  output += "</li>";
+}
+output += "</ol>";
+document.getElementById("container").innerHTML = output;
+//$("img").hide();
+$("img#pas").hide();
+
+var guess1 = "";
+var guess2 = "";
+var count = 0;
+
+$("li").click(function() {
+tries++;
+$("p#stepCounter").html("Step Counter : " + tries);
+  if ((count < 2) &&  ($(this).children("img").hasClass("face-up")) === false) {
+    
+    // increment guess count, show image, mark it as face up
+    count++;
+	
+	$(this).children("img#fail").hide("slow");
+	$(this).children("img#pas").show("slow");
+    //$(this).children("img").show();
+    $(this).children("img#pas").addClass("face-up");
+    
+    //guess #1
+    if (count === 1 ) { 
+      guess1 = $(this).children("img#pas").attr("src"); 
+	  poss= $(this).children("img#fail"); 
+	  console.log(poss);
+    }   
+    
+    //guess #2
+    else { 
+      guess2 = $(this).children("img#pas").attr("src"); 
+      
+      // since it's the 2nd guess check for match
+      if (guess1 === guess2) { 
+        console.log("match");
+        $("li").children("img#pas[src='" + guess2 + "']").addClass("match");
+		$(this).children("img#fail").remove();
+		poss.remove();
+		win++;
+		if (win == 18){
+console.log("you won");
+
+swal("Congratulation!", "You have done it! It took you " + tries + " steps.", "success");
+}
+      } 
+      
+      // else it's a miss
+      else { 
+        console.log("miss");
+        setTimeout(function() {
+          $("img#pas").not(".match").hide("slow");
+          $("img#pas").not(".match").removeClass("face-up");
+		  $("img#fail").show("slow");
+        }, 1000);
+      }
+      
+      // reset
+      count = 0; 
+      setTimeout(function() {  }, 60000);      
+    }
+  }
+});
+
+// randomize array of images
+function randomizeImages(){
+  Array.prototype.randomize = function()
+  {
+    var i = this.length, j, temp;
+    while ( --i )
+    {
+      j = Math.floor( Math.random() * (i - 1) );
+      temp = this[i];
+      this[i] = this[j];
+      this[j] = temp;
+    }
+  };
+  
+  images.randomize();
+}
+
+
+
+</script>

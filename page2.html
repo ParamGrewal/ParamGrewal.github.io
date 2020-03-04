@@ -1,0 +1,134 @@
+<html>
+	<font size="8" color="green">Final Project</font><br><br>
+	Number of rows: <input type="text" id="t1"></input><br><br>
+	Number of cols: <input type="text" id="t2" /><br><br>
+	
+	<button id="b1" onclick="generateTable()">Generate Table</button><br><br>
+	
+	<button id="b2" onclick="addColumn()">Add Column</button>
+	
+	<button id="b3" onclick="addRow()">Add Row</button>
+	
+	
+		
+	<script language="javascript">
+	
+	var num_rows = document.getElementById('t1').value;
+    var num_cols = document.getElementById('t2').value;
+	
+	
+		
+		function generateTable()
+
+{
+
+		var div1 = document.createElement("div");
+		div1.setAttribute("id","param");
+  document.body.appendChild(div1);
+		
+    var num_rows = document.getElementById('t1').value;
+    var num_cols = document.getElementById('t2').value;
+    var theader = '<table id="table1" border="1">\n';
+    var tbody = '';
+
+    for( var i=0; i<num_rows;i++)
+    {
+        tbody += '<tr>';
+        for( var j=0; j<num_cols;j++)
+        {
+            tbody += '<td>';
+            tbody += '&nbsp;&nbsp;&nbsp;&nbsp;';
+            tbody += '</td>'
+        }
+        tbody += '</tr>\n';
+    }
+    var tfooter = '</table>';
+    document.getElementById('param').innerHTML = theader + tbody + tfooter;
+	
+	
+	
+	
+	
+var rowInput = document.getElementById("t1");
+
+var rowCounter = document.createElement('div');
+rowCounter.id="rowdiv";
+	rowCounter.innerHTML = num_rows;
+	
+	rowInput.parentNode.replaceChild(rowCounter,rowInput); // method
+//rowInput.innerHTML = rowInput.innerHTML.replace(/<li>/g, '#').replace(/<\/li>/g, '<br>');
+   //rowInput.parentNode.removeChild(rowInput);
+	
+var colInput = document.getElementById("t2");
+
+
+var colCounter = document.createElement('div'); //add id;
+colCounter.id="coldiv";
+	colCounter.innerHTML = num_cols;
+
+    colInput.parentNode.replaceChild(colCounter,colInput);
+	
+var genButton = document.getElementById("b1");
+    genButton.parentNode.removeChild(genButton);
+
+
+//var elem = document.getElementById('b2');
+
+//for ( var i=0; i<=10 ;i++){
+//    var pre = elem.previousElementSibling;
+   
+ //   pre.parentNode.removeChild(pre);
+//}
+}
+
+
+function addColumn()
+	{
+	
+     var counter = document.getElementById("coldiv").innerHTML;
+	 counter++;
+	 document.getElementById("coldiv").innerHTML = counter;
+
+	//console.log(num_cols);
+		var t = document.getElementById("table1")
+		var tbdy_chldrn = t.tBodies[0].children
+		for(var i = 0; i < tbdy_chldrn.length; i++)
+		{
+			var apnd_col = document.createElement("td")
+			apnd_col.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;"
+			tbdy_chldrn[i].appendChild(apnd_col)
+		}
+		
+		//num_cols++;
+		
+		
+		
+		//document.getElementById("coldiv").innerHTML = 
+		
+		//colCounter.innerHTML = num_cols;
+	}
+	function addRow()
+	{
+	
+	
+	var counter = document.getElementById("rowdiv").innerHTML;
+	 counter++;
+	 document.getElementById("rowdiv").innerHTML = counter;
+		//Implement to add one row to the table
+		var t = document.getElementById("table1")
+		var appending_row = document.createElement("tr")
+				
+		var num_of_cols = t.tBodies[0].firstChild.children.length
+		
+		for(var i = 0; i < num_of_cols; i++)
+		{
+			var td1 = document.createElement("td")
+			td1.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;"
+			appending_row.appendChild(td1)
+		}	
+		var tbdy = t.tBodies[0].appendChild(appending_row)
+	}
+	
+	</script>
+	
+</html>
